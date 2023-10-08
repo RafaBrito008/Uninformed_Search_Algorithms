@@ -9,13 +9,17 @@ NEGRO = (0, 0, 0)
 VERDE = (0, 255, 0)
 
 # Tamaño de celda y pared
-ANCHO_CELDA = 20
-ALTO_CELDA = 20
+ANCHO_CELDA = 30
+ALTO_CELDA = 30
 GROSOR_PARED = 5
 
+# Tamaño del laberinto
+ANCHO_LABERINTO = 31
+ALTO_LABERINTO = 21
+
 # Dimensiones de la ventana
-ANCHO_VENTANA = 31 * ANCHO_CELDA
-ALTO_VENTANA = 21 * ALTO_CELDA
+ANCHO_VENTANA = ANCHO_LABERINTO * ANCHO_CELDA
+ALTO_VENTANA = ALTO_LABERINTO * ALTO_CELDA
 
 # Crear la ventana
 ventana = pygame.display.set_mode((ANCHO_VENTANA, ALTO_VENTANA))
@@ -47,9 +51,10 @@ laberinto = [
     "###############################"
 ]
 
+
 def dibujar_laberinto():
-    for fila in range(21):
-        for columna in range(31):
+    for fila in range(ALTO_LABERINTO):
+        for columna in range(ANCHO_LABERINTO):
             x = columna * ANCHO_CELDA
             y = fila * ALTO_CELDA
             if laberinto[fila][columna] == "#":

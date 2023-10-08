@@ -17,12 +17,16 @@ DIRS = [(1, 0), (0, 1), (-1, 0), (0, -1)]
 # Tamaño de celda
 ANCHO_CELDA = 30
 ALTO_CELDA = 30
-GROSOR_PARED = 5
+GROSOR_PARED = 8
+
+# Tamaño del laberinto
+ANCHO_LABERINTO = 31
+ALTO_LABERINTO = 21
 
 # Ajustar las dimensiones de la ventana para incluir el margen superior
 MARGEN_SUPERIOR = 60
-ANCHO_VENTANA = 31 * ANCHO_CELDA
-ALTO_VENTANA = 21 * ALTO_CELDA + MARGEN_SUPERIOR
+ANCHO_VENTANA = ANCHO_LABERINTO * ANCHO_CELDA
+ALTO_VENTANA = ALTO_LABERINTO * ALTO_CELDA + MARGEN_SUPERIOR
 
 # Fuente para dibujar números
 font = pygame.font.SysFont(None, 25)
@@ -33,7 +37,6 @@ pygame.display.set_caption("Depth First Search")
 
 # Laberinto definido como una matriz
 laberinto = [
-    # Aquí solo hay un ejemplo simple de laberinto, puedes modificarlo según necesites
     "################################",
     "#I                            #",
     "# ##################### ##### #",
@@ -48,7 +51,7 @@ laberinto = [
     "#             #   # #         #",
     "# ########### ### # ######### #",
     "# #           #     #       # #",
-    "# # ####### # ##### ####### # #",
+    "# # ######### ##### ####### # #",
     "# #       # #               # #",
     "# ####### # # ############### #",
     "#       # # #                 #",
@@ -58,8 +61,8 @@ laberinto = [
 ]
 
 def dibujar_laberinto():
-    for fila in range(21):
-        for columna in range(31):
+    for fila in range(ALTO_LABERINTO):
+        for columna in range(ANCHO_LABERINTO):
             x = columna * ANCHO_CELDA
             y = fila * ALTO_CELDA + MARGEN_SUPERIOR  # Ajustar la posición en y considerando el margen
             if laberinto[fila][columna] == "#":
