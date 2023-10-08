@@ -15,13 +15,13 @@ AZUL = (0, 0, 255)
 DIRS = [(1, 0), (0, 1), (-1, 0), (0, -1)]
 
 # Tamaño de celda
-ANCHO_CELDA = 30
+ANCHO_CELDA = 40
 ALTO_CELDA = 30
 GROSOR_PARED = 8
 
 # Tamaño del laberinto
 ANCHO_LABERINTO = 31
-ALTO_LABERINTO = 21
+ALTO_LABERINTO = 31
 
 # Ajustar las dimensiones de la ventana para incluir el margen superior
 MARGEN_SUPERIOR = 60
@@ -37,42 +37,58 @@ pygame.display.set_caption("Depth First Search")
 
 # Laberinto definido como una matriz
 laberinto = [
-    "################################",
-    "#I                            #",
-    "# ##################### ##### #",
-    "#     #               #     # #",
-    "# ### # ############# ### # # #",
-    "# #   # #           # #   # # #",
-    "# # ### # ######### # # # # # #",
-    "# #     #         # # # #   # #",
-    "# ############### # # # ##### #",
-    "#               # # # #       #",
-    "############# ### # # #########",
-    "#             #   # #         #",
-    "# ########### ### # ######### #",
-    "# #           #     #       # #",
-    "# # ######### ##### ####### # #",
-    "# #       # #               # #",
-    "# ####### # # ############### #",
-    "#       # # #                 #",
-    "####### # # ############### ###",
-    "#         #               #  O#",
-    "###############################"
+    "###############################",
+    "#I#     #   #     #           #",
+    "# # ### # ### # ### ### # ### #",
+    "# #   # # #   #  #  #   #     #",
+    "# ### # # # ### ### # ### ### #",
+    "#   #   # #           #       #",
+    "# ### ### ##### # ########### #",
+    "#     # # #     # #           #",
+    "# ##### # # ### ### # ### ### #",
+    "#       #   #   #   #     #   #",
+    "### # # # ##### # ### # # # # #",
+    "#   # #               # #   # #",
+    "# # # ### # ### ####### ##### #",
+    "# # #     #   #     #         #",
+    "### # ### # # ### # # #########",
+    "#       #   #     #   #     # #",
+    "# # ### ### ### ### # # ### # #",
+    "# #             #   #   # #   #",
+    "# # ####### # ### # ##### # # #",
+    "#   #       #     #         # #",
+    "# ### # # ### ### # ######### #",
+    "#     # #       #           # #",
+    "# ##### # ### # ##### ### # # #",
+    "#     #       #     # #   #   #",
+    "# # # # # # ### # # # # # ### #",
+    "# # #   # # #   # #     #   # #",
+    "# # # ### # # ### # ### # # # #",
+    "#     #         #   #     #   #",
+    "# ### # ##### # # ### ### ### #",
+    "#       #     #       #      O#",
+    "###############################",
 ]
+
 
 def dibujar_laberinto():
     for fila in range(ALTO_LABERINTO):
         for columna in range(ANCHO_LABERINTO):
             x = columna * ANCHO_CELDA
-            y = fila * ALTO_CELDA + MARGEN_SUPERIOR  # Ajustar la posición en y considerando el margen
+            y = (
+                fila * ALTO_CELDA + MARGEN_SUPERIOR
+            )  # Ajustar la posición en y considerando el margen
             if laberinto[fila][columna] == "#":
                 pygame.draw.rect(ventana, NEGRO, (x, y, ANCHO_CELDA, ALTO_CELDA))
             elif laberinto[fila][columna] == "I":
                 pygame.draw.rect(ventana, VERDE, (x, y, ANCHO_CELDA, ALTO_CELDA))
             elif laberinto[fila][columna] == "O":
-                pygame.draw.rect(ventana, VERDE, (x, y, ANCHO_CELDA, ALTO_CELDA), GROSOR_PARED) 
+                pygame.draw.rect(
+                    ventana, VERDE, (x, y, ANCHO_CELDA, ALTO_CELDA), GROSOR_PARED
+                )
             else:
                 pygame.draw.rect(ventana, BLANCO, (x, y, ANCHO_CELDA, ALTO_CELDA))
+
 
 def bidirectional_search(laberinto, inicio, objetivo):
     forward_queue = deque()
@@ -89,8 +105,12 @@ def bidirectional_search(laberinto, inicio, objetivo):
 
     intersect_node = None
 
-    forward_nodos_en_orden = []  # Lista para guardar el orden de los nodos visitados desde el inicio
-    backward_nodos_en_orden = []  # Lista para guardar el orden de los nodos visitados desde el final
+    forward_nodos_en_orden = (
+        []
+    )  # Lista para guardar el orden de los nodos visitados desde el inicio
+    backward_nodos_en_orden = (
+        []
+    )  # Lista para guardar el orden de los nodos visitados desde el final
 
     while forward_queue and backward_queue:
         # Búsqueda hacia adelante
@@ -119,7 +139,9 @@ def bidirectional_search(laberinto, inicio, objetivo):
 
         # Búsqueda hacia atrás
         backward_node = backward_queue.popleft()
-        backward_nodos_en_orden.append(backward_node)  # Agregar nodo a la lista de orden
+        backward_nodos_en_orden.append(
+            backward_node
+        )  # Agregar nodo a la lista de orden
         for dx, dy in reversed(DIRS):
             x, y = backward_node
             nx, ny = x + dx, y + dy
@@ -158,8 +180,11 @@ def bidirectional_search(laberinto, inicio, objetivo):
         backward_path.append(node)
         node = backward_parent[node]
 
-    return forward_path + [intersect_node] + backward_path, forward_nodos_en_orden, backward_nodos_en_orden
-
+    return (
+        forward_path + [intersect_node] + backward_path,
+        forward_nodos_en_orden,
+        backward_nodos_en_orden,
+    )
 
 
 def main():
@@ -190,27 +215,41 @@ def main():
 
             if evento.type == pygame_gui.UI_BUTTON_PRESSED:
                 if evento.ui_element == boton_inicio:
-                    solucion, forward_nodos_en_orden, backward_nodos_en_orden = bidirectional_search(laberinto, inicio, objetivo)
+                    (
+                        solucion,
+                        forward_nodos_en_orden,
+                        backward_nodos_en_orden,
+                    ) = bidirectional_search(laberinto, inicio, objetivo)
 
         ventana.fill(BLANCO)
         dibujar_laberinto()
 
         if solucion:
-            for (x, y) in solucion:
+            for x, y in solucion:
                 pygame.draw.rect(
-                    ventana, VERDE,
-                    (x * ANCHO_CELDA, y * ALTO_CELDA + MARGEN_SUPERIOR, ANCHO_CELDA, ALTO_CELDA),
+                    ventana,
+                    VERDE,
+                    (
+                        x * ANCHO_CELDA,
+                        y * ALTO_CELDA + MARGEN_SUPERIOR,
+                        ANCHO_CELDA,
+                        ALTO_CELDA,
+                    ),
                 )
 
-        for (x, y) in forward_nodos_en_orden:
+        for x, y in forward_nodos_en_orden:
             indice = forward_nodos_en_orden.index((x, y))
-            texto = font.render(f'I{indice}', True, NEGRO)
-            ventana.blit(texto, (x * ANCHO_CELDA + 5, y * ALTO_CELDA + 5 + MARGEN_SUPERIOR))
+            texto = font.render(f"I{indice}", True, NEGRO)
+            ventana.blit(
+                texto, (x * ANCHO_CELDA + 5, y * ALTO_CELDA + 5 + MARGEN_SUPERIOR)
+            )
 
-        for (x, y) in backward_nodos_en_orden:
+        for x, y in backward_nodos_en_orden:
             indice = backward_nodos_en_orden.index((x, y))
-            texto = font.render(f'F{indice}', True, NEGRO)
-            ventana.blit(texto, (x * ANCHO_CELDA + 5, y * ALTO_CELDA + 5 + MARGEN_SUPERIOR))
+            texto = font.render(f"F{indice}", True, NEGRO)
+            ventana.blit(
+                texto, (x * ANCHO_CELDA + 5, y * ALTO_CELDA + 5 + MARGEN_SUPERIOR)
+            )
 
         manager.update(tiempo_transcurrido)
         manager.draw_ui(ventana)
@@ -218,6 +257,7 @@ def main():
         pygame.display.flip()
 
     pygame.quit()
+
 
 if __name__ == "__main__":
     main()
