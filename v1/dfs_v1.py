@@ -2,16 +2,82 @@ import pygame
 import pygame_gui
 from collections import deque
 
-# Importar el laberinto
-import sys
-sys.path.append('./')
-from laberinto import *
-
-# Inicialización de pygame
 pygame.init()
+
+# Definición de colores y direcciones
+BLANCO = (255, 255, 255)
+NEGRO = (0, 0, 0)
+VERDE = (0, 255, 0)
+AZUL = (0, 0, 255)
 
 # Acciones que puede tomar el agente
 DIRS = [(-1, 0), (0, 1), (1, 0), (0, -1)]  # ARRIBA, DERECHA, ABAJO, IZQUIERDA
+
+#Elementos visuales
+ANCHO_CELDA = 30
+ALTO_CELDA = 25
+GROSOR_PARED = 8
+ANCHO_LABERINTO = 31
+ALTO_LABERINTO = 31
+MARGEN_SUPERIOR = 60
+ANCHO_VENTANA = ANCHO_LABERINTO * ANCHO_CELDA
+ALTO_VENTANA = ALTO_LABERINTO * ALTO_CELDA + MARGEN_SUPERIOR
+
+# Laberinto y otros recursos visuales
+font = pygame.font.SysFont(None, 22)
+ventana = pygame.display.set_mode((ANCHO_VENTANA, ALTO_VENTANA))
+pygame.display.set_caption("Depth First Search")
+
+laberinto = [
+    "###############################",
+    "#I#     #   #     #           #",
+    "# # ### # ### # ### ### # ### #",
+    "# #   # # #   #  #  #   #     #",
+    "# ### # # # ### ### # ### ### #",
+    "#   #   # #   #       #       #",
+    "# ### ### ##### # ########### #",
+    "#     # # #     # # #       # #",
+    "# ##### # # ####### # ### ### #",
+    "#       #   #   #   # #   #   #",
+    "### # # # ##### # ### # # # # #",
+    "#   # #               # #   # #",
+    "# # # ### # ### ####### ##### #",
+    "# # #     #   #     # #       #",
+    "### # ### # # ### # # #########",
+    "#       #   #     #   #     # #",
+    "# # ### ### ### ### # # ### # #",
+    "# #             #   #   # #   #",
+    "# # ####### # ### # ##### # # #",
+    "#   #       #     #         # #",
+    "# ### # # ### ### # ######### #",
+    "#     # #       #           # #",
+    "# ##### # ### # ##### ### # # #",
+    "#     #       #     # #   #   #",
+    "# # # # # # ### # # # # # ### #",
+    "# # #   # # #   # #     #   # #",
+    "# # # ### # # ### # ### # # # #",
+    "#     #         #   #     #   #",
+    "# ### # ##### # # ### ### ### #",
+    "#       #     #       #      O#",
+    "###############################",
+]
+
+
+def dibujar_laberinto():
+    for fila in range(ALTO_LABERINTO):
+        for columna in range(ANCHO_LABERINTO):
+            x = columna * ANCHO_CELDA
+            y = fila * ALTO_CELDA + MARGEN_SUPERIOR
+            char = laberinto[fila][columna]
+            color = {
+                "#": NEGRO,
+                "I": VERDE,
+                "O": VERDE,
+                " ": BLANCO
+            }.get(char, BLANCO)
+            pygame.draw.rect(ventana, color, (x, y, ANCHO_CELDA, ALTO_CELDA))
+            if char == "O":
+                pygame.draw.rect(ventana, BLANCO, (x, y, ANCHO_CELDA, ALTO_CELDA), GROSOR_PARED)
 
 def dfs(laberinto, inicio, objetivo):
     stack = deque([inicio])
@@ -47,13 +113,6 @@ def dfs(laberinto, inicio, objetivo):
     return [], nodos_visitados
 
 def main():
-    # Fuente para dibujar números
-    font = pygame.font.SysFont(None, 22)
-
-    # Crear la ventana
-    ventana = pygame.display.set_mode((ANCHO_VENTANA, ALTO_VENTANA))
-    pygame.display.set_caption("Depth First Search")
-
     inicio = None
     objetivo = None
     for y, fila in enumerate(laberinto):
@@ -85,7 +144,7 @@ def main():
                     solucion, nodos_visitados = dfs(laberinto, inicio, objetivo)
 
         ventana.fill(BLANCO)
-        dibujar_laberinto(ventana)
+        dibujar_laberinto()
 
         for x, y in solucion:
             pygame.draw.rect(ventana, VERDE, (x * ANCHO_CELDA, y * ALTO_CELDA + MARGEN_SUPERIOR, ANCHO_CELDA, ALTO_CELDA))
