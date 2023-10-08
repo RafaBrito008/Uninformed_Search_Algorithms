@@ -15,8 +15,8 @@ AZUL = (0, 0, 255)
 DIRS = [(1, 0), (0, 1), (-1, 0), (0, -1)]
 
 # Tamaño de celda
-ANCHO_CELDA = 40
-ALTO_CELDA = 30
+ANCHO_CELDA = 45
+ALTO_CELDA = 25
 GROSOR_PARED = 8
 
 # Tamaño del laberinto
@@ -29,7 +29,7 @@ ANCHO_VENTANA = ANCHO_LABERINTO * ANCHO_CELDA
 ALTO_VENTANA = ALTO_LABERINTO * ALTO_CELDA + MARGEN_SUPERIOR
 
 # Fuente para dibujar números
-font = pygame.font.SysFont(None, 25)
+font = pygame.font.SysFont(None, 22)
 
 # Crear la ventana
 ventana = pygame.display.set_mode((ANCHO_VENTANA, ALTO_VENTANA))
