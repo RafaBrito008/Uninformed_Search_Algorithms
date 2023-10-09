@@ -4,7 +4,8 @@ from collections import deque
 
 # Importar el laberinto
 import sys
-sys.path.append('./')
+
+sys.path.append("./")
 from laberinto import *
 
 # Inicialización de pygame
@@ -13,12 +14,13 @@ pygame.init()
 # Acciones que puede tomar el agente
 DIRS = [(-1, 0), (0, 1), (1, 0), (0, -1)]  # ARRIBA, DERECHA, ABAJO, IZQUIERDA
 
+
 def dfs(laberinto, inicio, objetivo):
     stack = deque([inicio])
     visitado = set([inicio])
     camino = {}
     nodos_visitados = []
-    
+
     while stack:
         nodo = stack.pop()
         nodos_visitados.append(nodo)
@@ -30,7 +32,7 @@ def dfs(laberinto, inicio, objetivo):
                 nodo = camino[nodo]
             ruta.append(inicio)
             return ruta[::-1], nodos_visitados
-        
+
         for dx, dy in DIRS:
             x, y = nodo
             nx, ny = x + dx, y + dy
@@ -45,6 +47,7 @@ def dfs(laberinto, inicio, objetivo):
                 visitado.add(vecino)
                 camino[vecino] = nodo
     return [], nodos_visitados
+
 
 def main():
     # Fuente para dibujar números
@@ -70,7 +73,7 @@ def main():
     boton_inicio = pygame_gui.elements.UIButton(
         relative_rect=pygame.Rect((ANCHO_VENTANA // 2 - 75, 10), (150, 40)),
         text="Buscar Solución",
-        manager=manager
+        manager=manager,
     )
 
     corriendo = True
@@ -81,18 +84,32 @@ def main():
                 corriendo = False
             manager.process_events(evento)
             if evento.type == pygame.USEREVENT:
-                if evento.user_type == pygame_gui.UI_BUTTON_PRESSED and evento.ui_element == boton_inicio:
+                if (
+                    evento.user_type == pygame_gui.UI_BUTTON_PRESSED
+                    and evento.ui_element == boton_inicio
+                ):
                     solucion, nodos_visitados = dfs(laberinto, inicio, objetivo)
 
         ventana.fill(BLANCO)
         dibujar_laberinto(ventana)
 
         for x, y in solucion:
-            pygame.draw.rect(ventana, VERDE, (x * ANCHO_CELDA, y * ALTO_CELDA + MARGEN_SUPERIOR, ANCHO_CELDA, ALTO_CELDA))
+            pygame.draw.rect(
+                ventana,
+                VERDE,
+                (
+                    x * ANCHO_CELDA,
+                    y * ALTO_CELDA + MARGEN_SUPERIOR,
+                    ANCHO_CELDA,
+                    ALTO_CELDA,
+                ),
+            )
 
         for paso, (x, y) in enumerate(nodos_visitados):
             texto = font.render(str(paso), True, NEGRO)
-            ventana.blit(texto, (x * ANCHO_CELDA + 5, y * ALTO_CELDA + 5 + MARGEN_SUPERIOR))
+            ventana.blit(
+                texto, (x * ANCHO_CELDA + 5, y * ALTO_CELDA + 5 + MARGEN_SUPERIOR)
+            )
 
         manager.update(tiempo_transcurrido)
         manager.draw_ui(ventana)
@@ -100,6 +117,7 @@ def main():
         pygame.display.flip()
 
     pygame.quit()
+
 
 if __name__ == "__main__":
     main()

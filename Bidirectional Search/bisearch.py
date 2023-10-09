@@ -4,7 +4,8 @@ from collections import deque
 
 # Importar el laberinto
 import sys
-sys.path.append('./')
+
+sys.path.append("./")
 from laberinto import *
 
 # Inicialización de pygame
@@ -12,13 +13,6 @@ pygame.init()
 
 # Acciones que puede tomar el agente
 DIRS = [(-1, 0), (0, 1), (1, 0), (0, -1)]  # ARRIBA, DERECHA, ABAJO, IZQUIERDA
-
-# Fuente para dibujar números
-font = pygame.font.SysFont(None, 22)
-
-# Crear la ventana
-ventana = pygame.display.set_mode((ANCHO_VENTANA, ALTO_VENTANA))
-pygame.display.set_caption("Depth First Search")
 
 
 def bidirectional_search(laberinto, inicio, objetivo):
@@ -47,7 +41,7 @@ def bidirectional_search(laberinto, inicio, objetivo):
         # Búsqueda hacia adelante
         forward_node = forward_queue.popleft()
         forward_nodos_en_orden.append(forward_node)  # Agregar nodo a la lista de orden
-        for dx, dy in reversed(DIRS):
+        for dx, dy in DIRS:
             x, y = forward_node
             nx, ny = x + dx, y + dy
             forward_neighbor = (nx, ny)
@@ -73,7 +67,7 @@ def bidirectional_search(laberinto, inicio, objetivo):
         backward_nodos_en_orden.append(
             backward_node
         )  # Agregar nodo a la lista de orden
-        for dx, dy in reversed(DIRS):
+        for dx, dy in DIRS:
             x, y = backward_node
             nx, ny = x + dx, y + dy
             backward_neighbor = (nx, ny)
@@ -125,7 +119,7 @@ def main():
     # Crear la ventana
     ventana = pygame.display.set_mode((ANCHO_VENTANA, ALTO_VENTANA))
     pygame.display.set_caption("Depth First Search")
-    
+
     inicio = None
     objetivo = None
     for y, fila in enumerate(laberinto):

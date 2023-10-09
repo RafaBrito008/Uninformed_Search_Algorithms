@@ -4,21 +4,15 @@ from collections import deque
 
 # Importar el laberinto
 import sys
-sys.path.append('./')
+
+sys.path.append("./")
 from laberinto import *
 
 # Inicialización de pygame
 pygame.init()
 
-# Direcciones posibles (abajo, derecha, arriba, izquierda)
-DIRS = [(1, 0), (0, 1), (-1, 0), (0, -1)]
-
-# Fuente para dibujar números
-font = pygame.font.SysFont(None, 22)
-
-# Crear la ventana
-ventana = pygame.display.set_mode((ANCHO_VENTANA, ALTO_VENTANA))
-pygame.display.set_caption("Depth First Search")
+# Acciones que puede tomar el agente
+DIRS = [(-1, 0), (0, 1), (1, 0), (0, -1)]  # ARRIBA, DERECHA, ABAJO, IZQUIERDA
 
 
 def iddfs(laberinto, inicio, objetivo):
@@ -55,8 +49,7 @@ def depth_limited_dfs(laberinto, inicio, objetivo, profundidad_maxima):
             ruta.append(inicio)
             return ruta[::-1], nodos_visitados
 
-        for dx, dy in reversed(DIRS):
-            # for dx, dy in DIRS:
+        for dx, dy in DIRS:
             x, y = nodo
             nx, ny = x + dx, y + dy
             vecino = (nx, ny)
