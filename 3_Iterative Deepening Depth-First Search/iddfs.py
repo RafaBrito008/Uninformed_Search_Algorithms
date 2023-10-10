@@ -12,7 +12,7 @@ from laberinto import *
 pygame.init()
 
 # Acciones que puede tomar el agente
-DIRS = [(-1, 0), (0, 1), (1, 0), (0, -1)]  # ARRIBA, DERECHA, ABAJO, IZQUIERDA
+ACCIONES = [(-1, 0), (0, 1), (1, 0), (0, -1)]  # ARRIBA, DERECHA, ABAJO, IZQUIERDA
 
 
 def iddfs(laberinto, inicio, objetivo):
@@ -49,7 +49,7 @@ def depth_limited_dfs(laberinto, inicio, objetivo, profundidad_maxima):
             ruta.append(inicio)
             return ruta[::-1], nodos_visitados
 
-        for dx, dy in DIRS:
+        for dx, dy in ACCIONES:
             x, y = nodo
             nx, ny = x + dx, y + dy
             vecino = (nx, ny)
@@ -72,7 +72,7 @@ def main():
 
     # Crear la ventana
     ventana = pygame.display.set_mode((ANCHO_VENTANA, ALTO_VENTANA))
-    pygame.display.set_caption("Depth First Search")
+    pygame.display.set_caption("Iterative Deepening Depth-First Search")
 
     inicio = None
     objetivo = None

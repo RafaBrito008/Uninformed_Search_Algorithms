@@ -12,7 +12,7 @@ from laberinto import *
 pygame.init()
 
 # Acciones que puede tomar el agente
-DIRS = [(-1, 0), (0, 1), (1, 0), (0, -1)]  # ARRIBA, DERECHA, ABAJO, IZQUIERDA
+ACCIONES = [(-1, 0), (0, 1), (1, 0), (0, -1)]  # ARRIBA, DERECHA, ABAJO, IZQUIERDA
 
 
 def dfs(laberinto, inicio, objetivo):
@@ -33,7 +33,7 @@ def dfs(laberinto, inicio, objetivo):
             ruta.append(inicio)
             return ruta[::-1], nodos_visitados
 
-        for dx, dy in DIRS:
+        for dx, dy in ACCIONES:
             x, y = nodo
             nx, ny = x + dx, y + dy
             vecino = (nx, ny)
